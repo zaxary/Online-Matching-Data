@@ -12,12 +12,20 @@ def greedy(randUsers, randServers):
     greedyDist = 0.0
     totalDist = [9999] * len(randUsers)
     removeVar = 0
-    for i in range(len(randUsers)):
-        for j in range(len(randServers)):
-            if(abs(randUsers[i]-randServers[j])<totalDist[i]):
-                    totalDist[i] = abs(randUsers[i] - randServers[j])
+    usersList = randUsers.tolist()
+    serversList = randServers.tolist()
+    for i in range(len(usersList)):
+        for j in range(len(serversList)):
+            if(abs(usersList[i]-serversList[j])<totalDist[i]):
+                    totalDist[i] = abs(usersList[i] - serversList[j])
+                    removeUser = i
                     removeVar = j #Using removevar to be the last one until i increments
-        randServers.tolist().remove(randServers[removeVar])
+        #print(serversList[removeVar])
+        serversList.remove(serversList[removeVar])
+        #print(usersList)
+        #print(totalDist[i])
+        #print(totalDist[i])
+        #print(serversList)
     for i in range(len(totalDist)):
         greedyDist += totalDist[i]
     return greedyDist
@@ -26,13 +34,20 @@ def greedy(randUsers, randServers):
 def opt (randUsers, randServers):
     optDist = 0.0
     i = 0
-    while(i in range(len(randServers))):
-        minUser = min(randUsers)
-        minServer = min(randServers)
+    usersList = randUsers.tolist()
+    serversList = randServers.tolist()
+
+    for i in range(len(usersList)):
+        minUser = min(usersList)
+        #print("This is min user: " + str(minUser))
+        minServer = min(serversList)
+        #print("This is minServer: " + str(minServer))
         optDist += abs(minServer - minUser)
-        randUsers.tolist().remove(min(randUsers))
-        randServers.tolist().remove(min(randServers))
-        i += 1
+        usersList.remove(minUser)
+        serversList.remove(minServer)
+        #print(usersList)
+        #print(optDist)
+        #print(serversList)
     return optDist
     #Based on what we know matching looking throughout the entire array
 def evaluate(greedyDist, optDist):
@@ -43,8 +58,10 @@ if __name__ == '__main__':
     print('Debugging random_instance')
     users = result[0]
     print('Debugging return [0]')
+    print(users)
     servers = result[1]
     print('Debugging return [1]')
+    print(servers)
     greedy_dist = greedy(users, servers)
     print('Debugging greedy_dist ' + str(greedy_dist))
     opt_dist = opt(users, servers)
@@ -59,5 +76,5 @@ if __name__ == '__main__':
         greedy_dist = greedy(users, servers)
         opt_dist = opt(users, servers)
         totalSum += evaluate(greedy_dist, opt_dist)
-    print(totalSum/trials)
+    print(totalSum/(trials))
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
